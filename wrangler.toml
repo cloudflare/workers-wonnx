@@ -1,0 +1,27 @@
+name = "webgpu-worker-dev"
+main = "build/worker/shim.mjs"
+compatibility_date = "2023-01-15"
+compatibility_flags = ["experimental", "nodejs_compat", "webgpu"]
+usage_model = "unbound"
+account_id = "3515b24d58ec616d11f4ce4290a02ac4"
+logpush = true
+
+[build]
+command = "cargo install -q worker-build && RUSTFLAGS=--cfg=web_sys_unstable_apis worker-build --dev"
+
+[vars]
+MODEL_FILE = "opt-squeeze.onnx"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["Classifier"]
+
+[durable_objects]
+bindings = [
+  { name = "CLASSIFIER", class_name = "Classifier" }
+]
+
+[[r2_buckets]]
+binding = 'MODEL_BUCKET'
+bucket_name = 'model-bucket'
+preview_bucket_name = 'model-bucket-dev'
